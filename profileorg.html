@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Organization Profile | MetaVault</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { main: ['Geist','Inter','sans-serif'] },
+      colors: {
+        bgdark: '#000000',
+        textsoft: '#f2f2f2',
+        accent: '#e04f00'
+      }
+    }
+  }
+}
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+body { font-family: 'Geist','Inter',sans-serif; -webkit-font-smoothing: antialiased; }
+</style>
+</head>
+
+<body class="min-h-screen bg-bgdark text-textsoft font-main">
+
+<!-- AUTH -->
+<script>
+if (!localStorage.getItem("auth_method")) location.href="login.html";
+</script>
+
+<!-- NAVBAR -->
+<header class="w-full px-10 py-8 border-b border-neutral-800 relative">
+
+  <!-- Logo (left) -->
+  <a href="/dashboard.html"
+     class="text-3xl font-semibold tracking-tight absolute left-10">
+    MetaVault
+  </a>
+
+  <!-- Centered main nav -->
+  <div class="max-w-7xl mx-auto flex justify-center">
+    <nav class="flex gap-8 text-sm text-neutral-400">
+      <a href="/dashboard.html" class="hover:text-white">Dashboard</a>
+      <a href="/upload.html" class="hover:text-white">Upload</a>
+      <a href="/bonds.html" class="hover:text-white">Marketplace</a>
+      <a href="/profileorg.html" class="text-white">Profile</a>
+    </nav>
+  </div>
+
+  <!-- Logout on far right -->
+  <a href="/role.html"
+     class="hover:text-white text-sm text-neutral-400 absolute right-10 top-1/2 -translate-y-1/2">
+    Logout
+  </a>
+
+</header>
+
+
+
+<main class="max-w-4xl mx-auto px-6 py-10 space-y-8">
+
+<div>
+  <h1 class="text-3xl">Organization Profile</h1>
+  <p class="text-neutral-400">Manage your organization identity and settings</p>
+</div>
+
+<div class="bg-neutral-900 border border-neutral-800 rounded-xl p-8 space-y-6">
+
+<div class="grid md:grid-cols-2 gap-6">
+  <div>
+    <label class="text-sm">Organization Name</label>
+    <input id="orgName" class="w-full mt-1 bg-black border border-neutral-700 rounded-xl p-3" />
+  </div>
+  <div>
+    <label class="text-sm">Registration Number</label>
+    <input id="regNumber" class="w-full mt-1 bg-black border border-neutral-700 rounded-xl p-3" />
+  </div>
+</div>
+
+<div class="grid md:grid-cols-2 gap-6">
+  <div>
+    <label class="text-sm">Email</label>
+    <input id="email" class="w-full mt-1 bg-black border border-neutral-700 rounded-xl p-3" />
+  </div>
+  <div>
+    <label class="text-sm">Phone</label>
+    <input id="phone" class="w-full mt-1 bg-black border border-neutral-700 rounded-xl p-3" />
+  </div>
+</div>
+
+<div>
+  <label class="text-sm">Business Address</label>
+  <input id="address" class="w-full mt-1 bg-black border border-neutral-700 rounded-xl p-3" />
+</div>
+
+<div>
+  <label class="text-sm">Website</label>
+  <input id="website" class="w-full mt-1 bg-black border border-neutral-700 rounded-xl p-3" />
+</div>
+
+<div>
+  <label class="text-sm">Description</label>
+  <textarea id="description" rows="4" class="w-full mt-1 bg-black border border-neutral-700 rounded-xl p-3"></textarea>
+</div>
+
+<div class="flex gap-4 pt-4">
+  <button id="saveBtn" class="bg-accent text-white px-8 py-3 rounded-full hover:opacity-90">
+    Save Changes
+  </button>
+</div>
+
+</div>
+
+</main>
+
+<script>
+const API = "http://localhost:4000";
+const ORG_ID = localStorage.getItem("org_id") || "ORG-001";
+
+async function loadProfile(){
+  const res = await fetch(`${API}/api/org/profile/${ORG_ID}`);
+  if(!res.ok) return;
+  const o = await res.json();
+
+  orgName.value = o.name || "";
+  regNumber.value = o.registrationNumber || "";
+  email.value = o.email || "";
+  phone.value = o.phone || "";
+  address.value = o.address || "";
+  website.value = o.website || "";
+  description.value = o.description || "";
+}
+
+saveBtn.onclick = async () => {
+  const payload = {
+    orgId: ORG_ID,
+    name: orgName.value,
+    registrationNumber: regNumber.value,
+    email: email.value,
+    phone: phone.value,
+    address: address.value,
+    website: website.value,
+    description: description.value
+  };
+
+  await fetch(`${API}/api/org/profile`, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  });
+
+  alert("Profile updated successfully");
+};
+
+loadProfile();
+</script>
+
+</body>
+</html>

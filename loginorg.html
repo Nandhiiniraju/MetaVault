@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sign In (Organization) | MetaVault</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { main: ['Geist','Inter','sans-serif'] },
+      colors: {
+        bgdark: '#050505',
+        cardbg: '#0f0f0f',
+        textsoft: '#f2f2f2',
+        textmuted: '#a1a1aa',
+        accent: '#e04f00',
+        borderdark: '#1a1a1a'
+      },
+      animation: {
+        blob: "blob 10s infinite",
+      },
+      keyframes: {
+        blob: {
+          "0%": { transform: "translate(0px, 0px) scale(1)" },
+          "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+          "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+          "100%": { transform: "translate(0px, 0px) scale(1)" }
+        }
+      }
+    }
+  }
+}
+</script>
+
+<style type="text/tailwindcss">
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+@layer base {
+  body { font-family:'Geist','Inter',sans-serif; -webkit-font-smoothing: antialiased; }
+}
+</style>
+
+<style>
+    /* Input Autofill Fix for Dark Mode */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus, 
+    input:-webkit-autofill:active{
+        -webkit-box-shadow: 0 0 0 30px #0a0a0a inset !important;
+        -webkit-text-fill-color: white !important;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    /* Glassmorphism Card */
+    .glass-card {
+        background-color: rgba(15, 15, 15, 0.4);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Fade In Animation */
+    .fade-in {
+        animation: fadeIn 1s ease-out forwards;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    @keyframes fadeIn {
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+</head>
+
+<body class="min-h-screen bg-bgdark text-textsoft flex items-center justify-center relative overflow-hidden">
+
+  <div class="absolute inset-0 w-full h-full pointer-events-none z-0 flex items-center justify-center opacity-50">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#9429ff] rounded-full mix-blend-screen filter blur-[120px] opacity-60 animate-blob"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-[60%] -translate-y-[40%] w-[500px] h-[500px] bg-[#67abfe] rounded-full mix-blend-screen filter blur-[120px] opacity-60 animate-blob animation-delay-2000"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-[40%] -translate-y-[60%] w-[500px] h-[500px] bg-[#7cf5fe] rounded-full mix-blend-screen filter blur-[120px] opacity-60 animate-blob animation-delay-4000"></div>
+  </div>
+
+  <a href="role.html" class="absolute top-8 left-8 z-20 flex items-center gap-2 text-sm text-neutral-500 hover:text-white transition-colors cursor-pointer group fade-in">
+    <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+    Back to Roles
+  </a>
+
+  <div class="w-full max-w-md px-6 relative z-10 fade-in">
+
+    <div class="flex flex-col items-center mb-10 text-center">
+      <h2 class="text-4xl font-bold tracking-tight text-white">Welcome Back</h2>
+      <p class="text-textmuted text-sm mt-2">Login to your organization issuer account</p>
+    </div>
+
+    <div class="glass-card rounded-3xl p-10">
+
+      <div class="space-y-6">
+        <div>
+          <label class="text-xs text-textmuted uppercase font-medium ml-1 mb-2 block">Email Address</label>
+          <input id="emailInput" type="email" placeholder="name@example.com"
+            class="bg-[#0a0a0a]/60 border border-white/5 rounded-xl px-5 py-4 w-full text-white outline-none focus:border-accent/50 focus:bg-[#0a0a0a] transition-all placeholder:text-neutral-600" />
+        </div>
+
+        <button id="magicLogin"
+          class="bg-white/5 border border-white/10 rounded-xl py-4 w-full text-white font-medium hover:bg-white/10 transition flex items-center justify-center gap-2 backdrop-blur-sm group">
+          <svg class="w-4 h-4 text-neutral-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+          Continue with Email
+        </button>
+      </div>
+
+      <div class="my-8 flex justify-center">
+        <span class="text-xs uppercase text-textmuted/50 tracking-wider">Or connect wallet</span>
+      </div>
+
+      <button id="metamaskLogin"
+        class="bg-accent/90 border border-accent rounded-xl py-4 w-full text-white font-bold hover:bg-accent hover:scale-[1.02] transition-all shadow-lg shadow-accent/20 flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.42 12.87c-.31-2.16-2.28-3.41-2.28-3.41s2.21-1.36 2.06-3.83c0 0-3.36 1.1-6.19-2.34l-2.02 2.14-2.01-2.14C7.07 7.21 3.71 6.11 3.71 6.11c-.16 2.47 2.06 3.83 2.06 3.83s-1.97 1.25-2.28 3.41c-.02.1-.03.2-.03.3 0 2.3 2.5 3.32 4.49 3.93l-1.63 3.63 2.87-1.16 2.76 2.82 2.76-2.82 2.87 1.16-1.63-3.63c1.99-.61 4.49-1.63 4.49-3.93 0-.1-.01-.2-.03-.3z"/></svg>
+        Login with MetaMask
+      </button>
+      
+      <div class="mt-8 text-center pt-8 border-t border-white/5">
+        <a href="loginidv.html" class="text-xs text-neutral-400 hover:text-white transition-colors flex items-center justify-center gap-1 group">
+          Are you an Individual Investor? <span class="group-hover:underline text-accent">Login here</span>
+        </a>
+
+      </div>
+
+    </div>
+    
+    <p class="text-center text-white/40 text-xs mt-12">
+      &copy; 2025 MetaVault Inc. Secured by Blockchain.
+    </p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/magic-sdk/dist/magic.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
+<script>
+const magic = new Magic("pk_live_4F635AECC56B742B");
+
+const emailInput = document.getElementById("emailInput");
+const magicBtn = document.getElementById("magicLogin");
+const metamaskBtn = document.getElementById("metamaskLogin");
+
+async function createUser(authId, email = "") {
+  try {
+    const res = await fetch("http://localhost:4000/api/investor/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ authId, email })
+    });
+
+    const user = await res.json();
+
+    if (!res.ok) {
+      throw new Error(user.error || "Login failed");
+    }
+
+    // Save session
+    localStorage.setItem("investorId", user._id);
+
+    // Redirect based on profile completion
+    if (!user.profileCompleted) {
+      window.location.href = "dashboard.html";
+    } else {
+      window.location.href = "dashboard.html";
+    }
+
+  } catch (err) {
+    console.error("Login Error:", err);
+    alert(err.message || "Authentication failed");
+  }
+}
+
+// MAGIC LOGIN
+magicBtn.addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+  if (!email) return alert("Enter email.");
+
+  try {
+    magicBtn.innerHTML = `
+      <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+      </svg> Sending OTP...
+    `;
+
+    await magic.auth.loginWithEmailOTP({ email });
+
+    localStorage.setItem("auth_method", "magic");
+    localStorage.setItem("magic_user", email);
+
+    await createUser(email, email);
+
+  } catch (err) {
+    console.error(err);
+    alert("Magic login failed.");
+
+    magicBtn.innerHTML = `
+      <svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+        </path>
+      </svg> Continue with Email
+    `;
+  }
+});
+
+// METAMASK LOGIN
+metamaskBtn.addEventListener("click", async () => {
+  if (!window.ethereum) {
+    alert("MetaMask not found.");
+    return;
+  }
+
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const accounts = await provider.send("eth_requestAccounts", []);
+    const address = accounts[0];
+
+    localStorage.setItem("auth_method", "metamask");
+    localStorage.setItem("metamask_address", address);
+
+    await createUser(address, "");
+
+  } catch (err) {
+    console.error(err);
+    alert("MetaMask connection failed.");
+  }
+});
+</script>
+
+
+</body>
+</html>

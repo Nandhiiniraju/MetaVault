@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Select Role | MetaVault</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { main: ['Geist','Inter','sans-serif'] },
+      colors: {
+        bgdark: '#050505',
+        cardbg: '#0f0f0f',
+        textsoft: '#f2f2f2',
+        textmuted: '#a1a1aa',
+        accent: '#e04f00',
+        borderdark: '#1a1a1a'
+      },
+      animation: {
+        blob: "blob 10s infinite",
+      },
+      keyframes: {
+        blob: {
+          "0%": { transform: "translate(0px, 0px) scale(1)" },
+          "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+          "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+          "100%": { transform: "translate(0px, 0px) scale(1)" }
+        }
+      }
+    }
+  }
+}
+</script>
+
+<style type="text/tailwindcss">
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+@layer base {
+  body { font-family:'Geist','Inter',sans-serif; -webkit-font-smoothing: antialiased; }
+}
+</style>
+
+<style>
+  /* --- Animation Classes --- */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+  }
+  .fade-in.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .burn-in {
+    opacity: 0;
+    filter: blur(10px) brightness(1.5);
+    transform: translateY(10px) scale(0.95);
+    transition: opacity 1.5s cubic-bezier(0.16,1,0.3,1),
+                filter 1.5s cubic-bezier(0.16,1,0.3,1),
+                transform 1.5s cubic-bezier(0.16,1,0.3,1);
+  }
+  .burn-in.active {
+    opacity: 1;
+    filter: blur(0) brightness(1);
+    transform: translateY(0) scale(1);
+  }
+
+  /* --- Card Styles --- */
+  .role-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: rgba(15, 15, 15, 0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .role-card:hover {
+    transform: translateY(-8px);
+    border-color: #404040;
+    background-color: rgba(20, 20, 20, 0.8);
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+  }
+</style>
+</head>
+
+<body class="bg-bgdark text-textsoft h-screen w-screen overflow-hidden relative">
+
+  <div class="absolute inset-0 w-full h-full pointer-events-none z-0 flex items-center justify-center opacity-50">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#9429ff] rounded-full mix-blend-screen filter blur-[120px] opacity-60 animate-blob"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-[60%] -translate-y-[40%] w-[500px] h-[500px] bg-[#67abfe] rounded-full mix-blend-screen filter blur-[120px] opacity-60 animate-blob animation-delay-2000"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-[40%] -translate-y-[60%] w-[500px] h-[500px] bg-[#7cf5fe] rounded-full mix-blend-screen filter blur-[120px] opacity-60 animate-blob animation-delay-4000"></div>
+  </div>
+
+  <div class="absolute inset-0 z-10 flex flex-col items-center px-6">
+    
+    <div class="mt-12 text-center burn-in" data-delay="100">
+      <div class="mb-2">
+        <span class="text-white font-bold tracking-tight text-xl uppercase tracking-widest">MetaVault</span>
+      </div>
+      <h1 class="text-5xl md:text-6xl font-bold tracking-tighter text-white">Choose your journey</h1>
+    </div>
+
+    <div class="flex-grow flex items-center justify-center w-full max-w-5xl">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full fade-in" data-delay="400">
+
+            <div onclick="selectRole('individual')" class="role-card rounded-3xl p-8 cursor-pointer group flex flex-col">
+                
+                <div class="w-14 h-14 rounded-2xl bg-neutral-900/80 border border-neutral-800 flex items-center justify-center text-white mb-6 transition-colors duration-300 group-hover:bg-accent group-hover:border-accent group-hover:text-black">
+                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                </div>
+
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-white mb-2">Individual Investor</h2>
+                    <p class="text-neutral-500 text-sm">Invest & Track Assets</p>
+                </div>
+                
+                <div class="space-y-2 text-xs text-neutral-400 border-t border-white/5 pt-4 mb-4">
+                    <div class="flex items-center gap-2"><span class="text-accent">✓</span> Access Bond Marketplace</div>
+                    <div class="flex items-center gap-2"><span class="text-accent">✓</span> Track Investment Records</div>
+                    <div class="flex items-center gap-2"><span class="text-accent">✓</span> Secure Wallet Integration</div>
+                </div>
+                
+                <div class="mt-auto flex items-center gap-2 text-white text-sm font-medium group-hover:translate-x-1 transition-transform duration-300">
+                    Continue as Individual <span class="text-accent">→</span>
+                </div>
+            </div>
+
+            <div onclick="selectRole('organization')" class="role-card rounded-3xl p-8 cursor-pointer group flex flex-col">
+                
+                <div class="w-14 h-14 rounded-2xl bg-neutral-900/80 border border-neutral-800 flex items-center justify-center text-white mb-6 transition-colors duration-300 group-hover:bg-accent group-hover:border-accent group-hover:text-black">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                </div>
+
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-white mb-2">Organization / Issuer</h2>
+                    <p class="text-neutral-500 text-sm">Tokenize & Manage</p>
+                </div>
+
+                <div class="space-y-2 text-xs text-neutral-400 border-t border-white/5 pt-4 mb-4">
+                    <div class="flex items-center gap-2"><span class="text-accent">✓</span> Tokenize & Upload Assets</div>
+                    <div class="flex items-center gap-2"><span class="text-accent">✓</span> Manage Bond Offerings</div>
+                    <div class="flex items-center gap-2"><span class="text-accent">✓</span> Verification Dashboard</div>
+                </div>
+
+                <div class="mt-auto flex items-center gap-2 text-white text-sm font-medium group-hover:translate-x-1 transition-transform duration-300">
+                    Continue as Organization <span class="text-accent">→</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <a href="index.html" class="mb-12 text-sm text-neutral-500 hover:text-white transition-colors opacity-70 hover:opacity-100 flex items-center gap-1 fade-in" data-delay="600">
+      ← Back to Home
+    </a>
+
+  </div>
+
+  <script>
+    // Selection Logic
+    function selectRole(role) {
+      localStorage.setItem("user_role", role);
+      if (role === "organization") window.location.href = "loginorg.html";
+      else window.location.href = "loginidv.html";
+    }
+
+    // Animation Observer
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const delay = entry.target.dataset.delay || 0;
+          setTimeout(() => entry.target.classList.add('active'), delay);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in, .burn-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

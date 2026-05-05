@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MetaVault | Digital Trust</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Fira+Code:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bgdark: '#050505',
+            textsoft: '#f2f2f2',
+            textmuted: '#a1a1aa',
+            accent: '#e04f00',
+          },
+          fontFamily: {
+            main: ['Geist', 'Inter', 'sans-serif'],
+            mono: ['Fira Code', 'monospace'],
+          },
+          animation: {
+            blob: "blob 7s infinite",
+            'fade-in': 'fadeIn 2s ease-out forwards',
+            'burn-in': 'burnIn 2.5s cubic-bezier(0.16,1,0.3,1) forwards',
+            'slide-up': 'slideUp 1.8s ease-out forwards',
+          },
+          keyframes: {
+            blob: {
+              "0%": { transform: "translate(0px, 0px) scale(1)" },
+              "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+              "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+              "100%": { transform: "translate(0px, 0px) scale(1)" }
+            },
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(30px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            burnIn: {
+              '0%': { opacity: '0', filter: 'blur(20px) brightness(2)', transform: 'translateY(20px) scale(0.95)' },
+              '100%': { opacity: '1', filter: 'blur(0) brightness(1)', transform: 'translateY(0) scale(1)' },
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(50px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Geist', 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background-color: #050505;
+      color: #f2f2f2;
+      overflow-x: hidden;
+    }
+    
+    /* Utility classes for Scroll Observer */
+    .anim-hidden { opacity: 0; }
+  </style>
+</head>
+
+<body>
+
+  <a href="role.html"
+     class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50
+            border border-white/20 bg-white/5 backdrop-blur-md px-8 py-3 rounded-full
+            text-xs uppercase tracking-wider text-white font-medium
+            transition-all duration-300 hover:bg-white hover:text-black hover:scale-105 shadow-2xl">
+    Login Portal
+  </a>
+
+  <section class="h-screen relative flex flex-col items-center justify-center px-10 overflow-hidden">
+    
+    <div class="absolute inset-0 w-full h-full pointer-events-none z-0 flex items-center justify-center opacity-60">
+      
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#9429ff] rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob"></div>
+      
+      <div class="absolute top-1/2 left-1/2 -translate-x-[60%] -translate-y-[40%] w-[500px] h-[500px] bg-[#67abfe] rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob animation-delay-2000"></div>
+      
+      <div class="absolute top-1/2 left-1/2 -translate-x-[40%] -translate-y-[60%] w-[500px] h-[500px] bg-[#7cf5fe] rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob animation-delay-4000"></div>
+      
+    </div>
+
+    <div class="flex flex-col items-center gap-12 relative z-10">
+      <h1 class="anim-element burn-in text-[6rem] md:text-[9rem] font-medium tracking-[-0.04em] leading-none text-white mix-blend-overlay" data-anim="animate-burn-in">
+        MetaVault
+      </h1>
+      <p class="anim-element fade-in text-sm md:text-base tracking-[0.2em] uppercase text-white/80" data-anim="animate-fade-in" style="animation-delay: 0.4s">
+        Secure. Verifiable. Immutable.
+      </p>
+    </div>
+  </section>
+
+  <section class="min-h-screen bg-[#0a0a0a] px-10 py-16 pt-[15vh] border-t border-white/5">
+    <div class="max-w-[1440px] mx-auto flex flex-col md:flex-row justify-between items-start gap-12">
+      <h2 class="anim-element text-[5rem] md:text-[9rem] font-normal tracking-[-0.04em] text-white/90" data-anim="animate-burn-in">
+        About
+      </h2>
+      <p class="anim-element text-xl md:text-[1.35rem] leading-[1.4] text-textmuted max-w-[600px] md:pt-[15vh]" data-anim="animate-fade-in" style="animation-delay: 0.3s">
+        MetaVault is a secure digital platform built to safeguard and verify high-value financial
+        and official documents. Once stored, authenticity and integrity are permanently preserved.
+      </p>
+    </div>
+  </section>
+
+  <section class="min-h-screen bg-bgdark px-10 py-16 pt-[10vh]">
+    <div class="max-w-[1440px] mx-auto flex flex-col justify-between min-h-[80vh]">
+      <p class="anim-element text-xl md:text-[1.35rem] leading-[1.4] text-textmuted max-w-[600px]" data-anim="animate-fade-in">
+        MetaVault removes uncertainty from verification by preventing tampering, reducing disputes,
+        and maintaining a transparent audit trail.
+      </p>
+
+      <div class="mt-auto">
+        <hr class="anim-element w-full border-t border-white/20 mb-8" data-anim="animate-slide-up">
+        <h2 class="anim-element text-[5rem] md:text-[9rem] font-normal tracking-[-0.04em] text-white" data-anim="animate-burn-in" style="animation-delay: 0.4s">
+          Why MetaVault?
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <section class="h-screen relative overflow-hidden">
+    <div class="absolute inset-0 bg-black/60 z-10"></div>
+    <img src="https://w.wallhaven.cc/full/6l/wallhaven-6lll9x.png"
+         class="absolute inset-0 w-full h-full object-cover opacity-50">
+
+    <div class="relative z-20 h-full flex flex-col justify-between p-12 max-w-[1440px] mx-auto text-white">
+      <h2 class="anim-element text-[5rem] md:text-[9rem] tracking-[-0.02em]" data-anim="animate-burn-in">
+        Contact
+      </h2>
+
+      <div class="anim-element flex flex-col md:flex-row justify-between text-lg gap-8" data-anim="animate-fade-in" style="animation-delay: 0.3s">
+        <span><strong class="text-accent block text-xs uppercase mb-1">Email</strong> enkryptolabs@gmail.com</span>
+        <span><strong class="text-accent block text-xs uppercase mb-1">Phone</strong> +91 90254 71516</span>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // This script handles the scroll triggering
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const animClass = el.dataset.anim;
+          
+          // Remove hidden state
+          el.classList.remove('anim-hidden');
+          // Add the Tailwind animation class
+          el.classList.add(animClass);
+          
+          // Stop observing once animated
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.anim-element').forEach(el => {
+      el.classList.add('anim-hidden'); // Hide initially
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>

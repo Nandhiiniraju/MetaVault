@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard | MetaVault</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { main: ['Geist','Inter','sans-serif'] },
+      colors: {
+        bgdark: '#050505',
+        cardbg: '#0f0f0f',
+        textsoft: '#f2f2f2',
+        textmuted: '#a1a1aa',
+        accent: '#e04f00',
+        borderdark: '#1a1a1a',
+        success: '#10b981'
+      },
+      animation: {
+        blob: "blob 10s infinite",
+      },
+      keyframes: {
+        blob: {
+          "0%": { transform: "translate(0px, 0px) scale(1)" },
+          "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+          "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+          "100%": { transform: "translate(0px, 0px) scale(1)" }
+        }
+      }
+    }
+  }
+}
+</script>
+
+<style type="text/tailwindcss">
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+@layer base {
+  body { font-family:'Geist','Inter',sans-serif; -webkit-font-smoothing: antialiased; }
+}
+</style>
+
+<style>
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+
+  /* Glassmorphism Card Style */
+  .dash-card {
+    background: rgba(15, 15, 15, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .dash-card:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Sidebar Active State */
+  .nav-item.active {
+    background: #1f1f1f;
+    color: white;
+    border-radius: 12px;
+  }
+</style>
+</head>
+
+<body class="bg-bgdark text-textsoft font-main h-screen overflow-hidden flex relative">
+
+<div class="absolute inset-0 w-full h-full pointer-events-none z-0 flex items-center justify-center opacity-30">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#9429ff] rounded-full mix-blend-screen filter blur-[150px] opacity-40 animate-blob"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-[60%] -translate-y-[40%] w-[600px] h-[600px] bg-[#67abfe] rounded-full mix-blend-screen filter blur-[150px] opacity-40 animate-blob animation-delay-2000"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-[40%] -translate-y-[60%] w-[600px] h-[600px] bg-[#7cf5fe] rounded-full mix-blend-screen filter blur-[150px] opacity-40 animate-blob animation-delay-4000"></div>
+</div>
+
+<script>
+// if (!localStorage.getItem("investorId")) window.location.href = "loginidv.html";
+</script>
+
+<aside class="w-[280px] shrink-0 bg-[#080808]/90 backdrop-blur-xl border-r border-neutral-900 flex flex-col p-6 z-20">
+  
+  <div class="mb-12 px-2 flex items-center gap-3">
+    <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-accent backdrop-blur-md">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+    </div>
+    <span class="text-xl font-bold tracking-tight text-white">MetaVault</span>
+  </div>
+
+  <nav class="space-y-2 flex-1">
+    <a href="idv-dashboard.html" class="nav-item active flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+      Dashboard
+    </a>
+    <a href="marketplace.html" class="nav-item text-neutral-400 hover:text-white hover:bg-neutral-900 rounded-xl flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      Marketplace
+    </a>
+    <a href="profile.html" class="nav-item text-neutral-400 hover:text-white hover:bg-neutral-900 rounded-xl flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+      Profile
+    </a>
+  </nav>
+
+  <div class="mt-auto border-t border-neutral-900 pt-6 space-y-2">
+    <a href="role.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-neutral-400 hover:text-white hover:bg-neutral-900 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+        Logout
+    </a>
+  </div>
+</aside>
+
+<main class="flex-1 overflow-y-auto p-8 lg:p-12 relative z-10">
+  
+  <header class="flex justify-between items-center mb-10">
+    <div>
+      <h1 class="text-3xl font-bold text-white">Dashboard</h1>
+      <p class="text-textmuted mt-1">Overview of your bond investments and contributions</p>
+    </div>
+    <div class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-textmuted backdrop-blur-md">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+    </div>
+  </header>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+    
+    <div class="dash-card p-6 flex flex-col justify-between h-32">
+        <div>
+            <p class="text-2xl font-bold text-white" id="totalInvested">₹0</p>
+            <p class="text-xs text-textmuted mt-1 uppercase tracking-wide">Total Invested</p>
+        </div>
+        <div class="h-1 w-full bg-white/10 rounded-full overflow-hidden">
+            <div class="h-full bg-accent w-[70%]"></div>
+        </div>
+    </div>
+
+    <div class="dash-card p-6 flex flex-col justify-between h-32">
+        <div>
+            <p class="text-2xl font-bold text-white" id="activeBonds">0</p>
+            <p class="text-xs text-textmuted mt-1 uppercase tracking-wide">Active Bonds</p>
+        </div>
+        <div class="h-1 w-full bg-white/10 rounded-full overflow-hidden">
+            <div class="h-full bg-success w-[40%]"></div>
+        </div>
+    </div>
+
+    <div class="dash-card p-6 flex flex-col justify-between h-32">
+        <div>
+            <p class="text-2xl font-bold text-white" id="avgRate">0%</p>
+            <p class="text-xs text-textmuted mt-1 uppercase tracking-wide">Avg. Interest Rate</p>
+        </div>
+        <div class="h-1 w-full bg-white/10 rounded-full overflow-hidden">
+            <div class="h-full bg-blue-500 w-[60%]"></div>
+        </div>
+    </div>
+
+    <div class="dash-card p-6 flex flex-col justify-between h-32">
+        <div>
+            <p class="text-2xl font-bold text-white" id="maturedBonds">0</p>
+            <p class="text-xs text-textmuted mt-1 uppercase tracking-wide">Matured Bonds</p>
+        </div>
+        <div class="h-1 w-full bg-white/10 rounded-full overflow-hidden">
+            <div class="h-full bg-yellow-500 w-[90%]"></div>
+        </div>
+    </div>
+
+  </div>
+
+  <section class="mb-10">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold text-white">My Bonds</h2>
+        <button class="text-xs text-textmuted hover:text-white transition-colors">View All</button>
+    </div>
+    
+    <div id="myBonds" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="col-span-full py-10 text-center text-textmuted dash-card">
+            Loading your portfolio...
+        </div>
+    </div>
+  </section>
+
+  <section class="dash-card p-8">
+    <h3 class="text-lg font-bold text-white mb-6">Quick Actions</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <a href="marketplace.html" class="group p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition flex items-center gap-4">
+            <div class="w-10 h-10 rounded-lg bg-accent/20 flex items-center justify-center text-accent">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <div>
+                <h4 class="font-medium text-white text-sm">Browse Market</h4>
+                <p class="text-xs text-textmuted group-hover:text-white/70 transition">Find new bonds</p>
+            </div>
+        </a>
+
+        <a href="records.html" class="group p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition flex items-center gap-4">
+            <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-500">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            </div>
+            <div>
+                <h4 class="font-medium text-white text-sm">View Records</h4>
+                <p class="text-xs text-textmuted group-hover:text-white/70 transition">Transaction history</p>
+            </div>
+        </a>
+
+        <a href="profile.html" class="group p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition flex items-center gap-4">
+            <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center text-green-500">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            </div>
+            <div>
+                <h4 class="font-medium text-white text-sm">Edit Profile</h4>
+                <p class="text-xs text-textmuted group-hover:text-white/70 transition">Account settings</p>
+            </div>
+        </a>
+
+    </div>
+  </section>
+
+</main>
+
+<script>
+const API = "http://localhost:4000";
+
+// Require real login
+const investorId = localStorage.getItem("investorId");
+
+if (!investorId) {
+  alert("Please login first");
+  window.location.href = "loginidv.html";
+}
+
+async function safeFetch(url, options = {}) {
+  try {
+    const res = await fetch(url, options);
+    const text = await res.text();
+    try {
+      return { ok: res.ok, data: JSON.parse(text) };
+    } catch {
+      return { ok: res.ok, data: { error: text } };
+    }
+  } catch (err) {
+    return { ok: false, data: { error: err.message } };
+  }
+}
+
+async function loadDashboard() {
+  const { ok, data: pools } = await safeFetch(`${API}/api/pool/public`);
+
+  if (!ok) {
+    alert("Failed to load portfolio data");
+    return;
+  }
+
+  const container = document.getElementById("myBonds");
+  container.innerHTML = "";
+
+  let totalInvested = 0;
+  let activeCount = 0;
+  let maturedCount = 0;
+
+  const myPools = pools.filter(pool =>
+    pool.ownershipSnapshot &&
+    pool.ownershipSnapshot.some(o => o.contributorPublicId === investorId)
+  );
+
+  if (myPools.length === 0) {
+    container.innerHTML = `
+      <div class="col-span-full py-10 text-center text-textmuted dash-card">
+        You have not invested in any bonds yet.
+      </div>`;
+  }
+
+  myPools.forEach(pool => {
+    const myEntry = pool.ownershipSnapshot.find(
+      o => o.contributorPublicId === investorId
+    );
+
+    const invested = Number(myEntry.amount);
+    const ownership = (myEntry.percentage * 100).toFixed(2);
+
+    totalInvested += invested;
+
+    if (pool.state === "MATURED") maturedCount++;
+    else activeCount++;
+
+    // Calculate payout if available
+    let payoutInfo = null;
+
+    if (pool.payouts) {
+      payoutInfo = pool.payouts.find(
+        p => p.contributor === investorId
+      );
+    }
+
+    const alreadyClaimed = payoutInfo ? payoutInfo.claimed : false;
+
+    const card = document.createElement("div");
+    card.className = "dash-card p-6 flex flex-col gap-4";
+
+    card.innerHTML = `
+      <div class="flex justify-between items-center">
+        <h3 class="text-lg font-bold">${pool.bondName}</h3>
+
+        <span class="px-2 py-1 text-xs rounded border ${
+          pool.state === "MATURED"
+            ? "bg-green-500/10 text-green-500 border-green-500/20"
+            : "bg-blue-500/10 text-blue-500 border-blue-500/20"
+        }">
+          ${pool.state}
+        </span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 text-sm">
+        <div>
+          <div class="text-textmuted">Invested</div>
+          <div class="font-bold">₹${invested.toLocaleString()}</div>
+        </div>
+
+        <div>
+          <div class="text-textmuted">Ownership</div>
+          <div class="font-bold">${ownership}%</div>
+        </div>
+
+        <div>
+          <div class="text-textmuted">Return Rate</div>
+          <div class="font-bold">${pool.expectedReturnRate}%</div>
+        </div>
+
+        <div>
+          <div class="text-textmuted">Maturity Date</div>
+          <div class="font-bold">
+            ${pool.maturityDate
+              ? new Date(pool.maturityDate).toLocaleString()
+              : "N/A"}
+          </div>
+        </div>
+
+        ${
+          payoutInfo
+            ? `
+        <div>
+          <div class="text-textmuted">Interest</div>
+          <div class="font-bold text-green-400">
+            ₹${payoutInfo.interest.toLocaleString()}
+          </div>
+        </div>
+
+        <div>
+          <div class="text-textmuted">Total Payout</div>
+          <div class="font-bold">
+            ₹${payoutInfo.total.toLocaleString()}
+          </div>
+        </div>
+        `
+            : ""
+        }
+      </div>
+
+      <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
+
+        <button
+          onclick="openContribute('${pool._id}')"
+          class="px-4 py-2 bg-white text-black text-xs font-bold rounded">
+          View
+        </button>
+
+        ${
+          pool.state === "MATURED" && payoutInfo && !alreadyClaimed
+            ? `
+        <button
+          onclick="claim('${pool._id}')"
+          class="px-4 py-2 bg-green-600 text-white text-xs font-bold rounded">
+          Claim Yield
+        </button>
+        `
+            : alreadyClaimed
+            ? `<span class="text-green-500 text-xs font-bold">Claimed</span>`
+            : ""
+        }
+
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+
+  document.getElementById("totalInvested").textContent =
+    "₹" + totalInvested.toLocaleString();
+
+  document.getElementById("activeBonds").textContent =
+    activeCount;
+
+  document.getElementById("maturedBonds").textContent =
+    maturedCount;
+
+  document.getElementById("avgRate").textContent =
+    myPools.length
+      ? (
+          myPools.reduce((a, b) => a + Number(b.expectedReturnRate), 0) /
+          myPools.length
+        ).toFixed(2) + "%"
+      : "0%";
+}
+
+function openContribute(id) {
+  localStorage.setItem("selectedPool", id);
+  window.location.href = "contribute.html";
+}
+
+async function claim(poolId) {
+  if (!confirm("Proceed to claim your matured yield?")) return;
+
+  const { ok, data } = await safeFetch(
+    `${API}/api/claim/${poolId}/claim`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ investorId })
+    }
+  );
+
+  if (!ok) {
+    alert(data.error || "Claim failed");
+    return;
+  }
+
+  alert("Yield claimed successfully!");
+  loadDashboard();
+}
+
+loadDashboard();
+</script>
+
+
+</body>
+</html>

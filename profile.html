@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Profile | MetaVault</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { main: ['Geist','Inter','sans-serif'] },
+      colors: {
+        bgdark: '#050505',
+        cardbg: '#0f0f0f',
+        textsoft: '#f2f2f2',
+        textmuted: '#a1a1aa',
+        accent: '#e04f00',
+        borderdark: '#1a1a1a',
+        success: '#10b981'
+      }
+    }
+  }
+}
+</script>
+
+<style>
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+  ::-webkit-scrollbar-track { background: #050505; }
+
+  .glass-card {
+    background: linear-gradient(145deg, rgba(20, 20, 20, 0.9) 0%, rgba(10, 10, 10, 0.9) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+  }
+
+  .input-field {
+    background: #000000 !important;
+    border: 1px solid #222 !important;
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    width: 100%;
+    transition: all 0.2s ease;
+  }
+
+  .input-field:focus {
+    border-color: #e04f00 !important;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(224, 79, 0, 0.1);
+  }
+
+  .status-badge {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+
+<body class="bg-bgdark text-textsoft font-main h-screen overflow-hidden flex">
+
+<script>
+const investorId = localStorage.getItem("investorId");
+if (!investorId) {
+  alert("Session expired");
+  window.location.href = "loginidv.html";
+}
+</script>
+
+<main class="flex-1 overflow-y-auto p-6 md:p-12 lg:px-24">
+
+    <header class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+            <h1 class="text-4xl font-bold tracking-tight text-white mb-2">Account Overview</h1>
+            <p class="text-textmuted text-lg">Manage your digital vault and transactional identity.</p>
+        </div>
+        <div class="flex items-center gap-2 text-sm text-textmuted bg-white/5 px-4 py-2 rounded-full border border-white/5">
+            <span class="w-2 h-2 bg-success rounded-full animate-pulse"></span>
+            Network: Sepolia Mainnet
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+        
+        <div class="xl:col-span-2 space-y-8">
+            <div class="glass-card rounded-[2rem] p-8">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-xl font-semibold flex items-center gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10"/></svg>
+                        MetaVault Assets
+                    </h2>
+                    <span class="status-badge">Active Wallet</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white/[0.02] p-6 rounded-2xl border border-white/5">
+                        <p class="text-textmuted text-xs uppercase tracking-widest mb-2 font-medium">Available Balance</p>
+                        <div class="flex items-baseline gap-2">
+                            <span id="walletBalance" class="text-4xl font-bold text-white">₹0</span>
+                            <span class="text-textmuted text-sm italic">INR</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/[0.02] p-6 rounded-2xl border border-white/5 flex flex-col justify-between">
+                        <p class="text-textmuted text-xs uppercase tracking-widest mb-2 font-medium">Unique Wallet Address</p>
+                        <p id="walletId" class="text-xs font-mono break-all text-accent bg-accent/5 p-2 rounded-lg border border-accent/10"></p>
+                    </div>
+                </div>
+
+                <div class="mt-12">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-medium">Transaction Ledger</h3>
+                        <button class="text-xs text-textmuted hover:text-accent transition-colors underline underline-offset-4">View All</button>
+                    </div>
+
+                    <div class="overflow-hidden rounded-xl border border-white/5">
+                        <table class="w-full text-left">
+                            <thead class="bg-white/[0.03] text-textmuted text-[10px] uppercase tracking-widest font-bold">
+                                <tr>
+                                    <th class="px-6 py-4">Transaction hash</th>
+                                    <th class="px-6 py-4 text-center">Amount</th>
+                                    <th class="px-6 py-4">Status</th>
+                                    <th class="px-6 py-4 text-right">Timestamp</th>
+                                </tr>
+                            </thead>
+                            <tbody id="walletTxs" class="text-xs divide-y divide-white/5">
+                                <tr>
+                                    <td colspan="4" class="py-12 text-center text-textmuted animate-pulse font-light">
+                                        Synchronizing transactions...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="xl:col-span-1">
+            <div id="container" class="glass-card rounded-[2rem] p-8 sticky top-0">
+                <div class="text-center text-textmuted py-20 flex flex-col items-center gap-4">
+                    <div class="w-10 h-10 border-2 border-accent border-t-transparent rounded-full animate-spin"></div>
+                    Retrieving profile data...
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+// -------- NO CHANGES TO SCRIPT LOGIC --------
+
+async function loadWallet() {
+  try {
+    const res = await fetch(`http://localhost:4000/api/wallet/${investorId}`);
+    const wallet = await res.json();
+
+    document.getElementById("walletId").innerText = investorId;
+    document.getElementById("walletBalance").innerText = "₹" + (wallet.balance || 0);
+
+    const txContainer = document.getElementById("walletTxs");
+
+    if (!wallet.transactions || wallet.transactions.length === 0) {
+      txContainer.innerHTML = `
+        <tr>
+          <td colspan="4" class="py-12 text-center text-textmuted italic">
+            Zero transaction history detected
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    txContainer.innerHTML = wallet.transactions
+      .slice()
+      .reverse()
+      .map(tx => `
+        <tr class="hover:bg-white/[0.01] transition-colors group">
+          <td class="px-6 py-4 font-mono text-[10px] text-textmuted group-hover:text-accent transition-colors">${tx.txId}</td>
+          <td class="px-6 py-4 text-center font-bold text-success text-sm">₹${tx.amount}</td>
+          <td class="px-6 py-4">
+            <span class="text-[10px] bg-white/5 px-2 py-1 rounded text-white">${tx.type}</span>
+          </td>
+          <td class="px-6 py-4 text-right text-textmuted text-[10px]">${new Date(tx.timestamp).toLocaleString()}</td>
+        </tr>
+      `)
+      .join("");
+
+  } catch (err) {
+    console.error("Wallet load error:", err);
+  }
+}
+
+async function loadProfile() {
+  const res = await fetch(`http://localhost:4000/api/investor/me/${investorId}`);
+  const user = await res.json();
+  if (!res.ok) return alert("Failed to load profile");
+
+  const c = document.getElementById("container");
+  c.innerHTML = `
+    <div class="flex flex-col gap-6">
+        <div class="flex items-center gap-4 mb-4">
+             <div class="w-12 h-12 rounded-full bg-accent flex items-center justify-center text-white font-bold text-xl">
+                ${user.firstName ? user.firstName[0] : 'U'}
+             </div>
+             <div>
+                <h3 class="font-bold text-white text-lg leading-none">${user.firstName || 'User'} ${user.lastName || ''}</h3>
+                <span class="text-[10px] text-textmuted uppercase tracking-widest font-semibold">Verified Profile</span>
+             </div>
+        </div>
+
+        <div class="space-y-4">
+            <div class="space-y-1">
+                <label class="text-textmuted text-[10px] uppercase font-bold tracking-widest ml-1">First Name</label>
+                <input id="firstName" value="${user.firstName || ""}" class="input-field">
+            </div>
+
+            <div class="space-y-1">
+                <label class="text-textmuted text-[10px] uppercase font-bold tracking-widest ml-1">Last Name</label>
+                <input id="lastName" value="${user.lastName || ""}" class="input-field">
+            </div>
+
+            <div class="space-y-1">
+                <label class="text-textmuted text-[10px] uppercase font-bold tracking-widest ml-1">Contact Phone</label>
+                <input id="phone" value="${user.phone || ""}" class="input-field">
+            </div>
+
+            <div class="space-y-1">
+                <label class="text-textmuted text-[10px] uppercase font-bold tracking-widest ml-1">Account Email</label>
+                <input value="${user.email || ""}" disabled class="input-field opacity-40 cursor-not-allowed">
+            </div>
+        </div>
+
+        <div class="pt-6">
+            <button onclick="saveProfile()" class="w-full bg-accent hover:bg-orange-500 text-white font-bold py-3 rounded-xl transition-all shadow-[0_0_20px_rgba(224,79,0,0.2)] hover:shadow-[0_0_25px_rgba(224,79,0,0.4)]">
+                Update Identity
+            </button>
+            <p class="text-center text-[9px] text-textmuted mt-4">Security: Your data is encrypted on-chain.</p>
+        </div>
+    </div>
+  `;
+}
+
+async function saveProfile() {
+  const data = {
+    firstName: document.getElementById("firstName").value,
+    lastName: document.getElementById("lastName").value,
+    phone: document.getElementById("phone").value
+  };
+
+  const res = await fetch(`http://localhost:4000/api/investor/profile/${investorId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+
+  if (!res.ok) return alert("Save failed");
+  alert("Profile saved");
+  loadProfile();
+}
+
+loadWallet();
+loadProfile();
+</script>
+
+</body>
+</html>

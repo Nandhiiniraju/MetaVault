@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Portfolio | MetaVault</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { main: ['Geist','Inter','sans-serif'] },
+      colors: {
+        bgdark: '#050505',
+        cardbg: '#0f0f0f',
+        textsoft: '#f2f2f2',
+        textmuted: '#a1a1aa',
+        accent: '#e04f00',
+        borderdark: '#1a1a1a',
+        success: '#10b981'
+      }
+    }
+  }
+}
+</script>
+
+<style>
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-thumb{background:#333;border-radius:4px}
+.dash-card{background:rgba(15,15,15,.6);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.05);border-radius:1rem}
+.nav-item.active{background:#1f1f1f;color:white;border-radius:12px}
+</style>
+</head>
+
+<body class="bg-bgdark text-textsoft h-screen flex">
+
+<script>
+const investorId = localStorage.getItem("investorId");
+if (!investorId) location.href = "loginidv.html";
+</script>
+
+<main class="flex-1 p-10 space-y-10">
+
+<header>
+  <h1 class="text-3xl font-bold">Your Portfolio</h1>
+  <p class="text-textmuted">Track your investments & blockchain proofs</p>
+</header>
+
+<div id="summary" class="grid grid-cols-4 gap-6"></div>
+
+<section>
+  <h2 class="font-bold mb-3">Active Investments</h2>
+  <div id="active" class="space-y-3"></div>
+</section>
+
+<section>
+  <h2 class="font-bold mb-3">Completed Investments</h2>
+  <div id="completed" class="space-y-3"></div>
+</section>
+
+<section>
+  <h2 class="font-bold mb-3">Claim History</h2>
+  <div id="claims" class="dash-card p-4 space-y-2"></div>
+</section>
+
+</main>
+
+<!-- Modal -->
+<div id="modal" class="fixed inset-0 hidden bg-black/80 flex items-center justify-center">
+  <div class="dash-card p-6 w-[400px] space-y-4">
+    <h3 class="text-xl font-bold">On-Chain Proof</h3>
+    <div id="proof" class="text-sm font-mono text-textmuted"></div>
+    <button onclick="closeModal()" class="w-full bg-white/10 py-2 rounded">Close</button>
+  </div>
+</div>
+
+<script>
+async function loadPortfolio() {
+  const res = await fetch(`http://localhost:4000/api/investor/portfolio/${investorId}`);
+  const data = await res.json();
+
+  summary.innerHTML = `
+    <div class="dash-card p-4">Total Invested<br><b>₹${data.totalInvested}</b></div>
+    <div class="dash-card p-4">Total Earned<br><b class="text-success">₹${data.totalEarned}</b></div>
+    <div class="dash-card p-4">Active Bonds<br><b>${data.active.length}</b></div>
+    <div class="dash-card p-4">Completed Bonds<br><b>${data.completed.length}</b></div>
+  `;
+
+  active.innerHTML = data.active.map(b => `
+    <div class="dash-card p-4 flex justify-between">
+      <div><b>${b.name}</b><br><span class="text-textmuted">Active</span></div>
+      <div>₹${b.invested}</div>
+    </div>
+  `).join("");
+
+  completed.innerHTML = data.completed.map(b => `
+    <div class="dash-card p-4 flex justify-between items-center">
+      <div><b>${b.name}</b><br><span class="text-textmuted">₹${b.invested}</span></div>
+      ${b.proof ? `
+        <button onclick='showProof(${JSON.stringify(b.proof)})'
+          class="bg-success/10 border border-success/20 text-success px-3 py-1 rounded text-xs">
+          Proof
+        </button>` : `<span class="text-textmuted text-xs">Awaiting settlement</span>`}
+    </div>
+  `).join("");
+
+  claims.innerHTML = data.claims.map(c => `
+    <div class="flex justify-between text-sm">
+      <span>${c.poolId}</span>
+      <a class="text-accent" target="_blank" href="https://sepolia.etherscan.io/tx/${c.txHash}">
+        View Tx
+      </a>
+    </div>
+  `).join("");
+}
+
+function showProof(p) {
+  proof.innerHTML = `
+    <div>Contract: ${p.contract}</div>
+    <div>Tx Hash: ${p.tx}</div>
+    <a class="text-accent" target="_blank"
+       href="https://sepolia.etherscan.io/tx/${p.tx}">
+       Open in Etherscan →
+    </a>
+  `;
+  modal.classList.remove("hidden");
+}
+
+function closeModal() {
+  modal.classList.add("hidden");
+}
+
+loadPortfolio();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Invest | MetaVault</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { main: ['Geist','Inter','sans-serif'] },
+      colors: {
+        bgdark: '#050505',
+        cardbg: '#0f0f0f',
+        textsoft: '#f2f2f2',
+        textmuted: '#a1a1aa',
+        accent: '#e04f00',
+        borderdark: '#1a1a1a',
+        success: '#10b981'
+      }
+    }
+  }
+}
+</script>
+
+<style>
+body { font-family:'Geist','Inter',sans-serif; }
+</style>
+</head>
+
+<body class="bg-bgdark text-textsoft h-screen flex">
+
+<main class="flex-1 p-10 space-y-8">
+
+<h1 id="bondName" class="text-3xl font-bold">Loading...</h1>
+
+<div class="grid grid-cols-5 gap-6">
+  <div>Issuer: <strong id="issuer">--</strong></div>
+  <div>Target: ₹<strong id="target">--</strong></div>
+  <div>Raised: ₹<strong id="raised">--</strong></div>
+  <div>Return: <strong id="returnRate">--</strong>%</div>
+  <div>Min Entry: ₹<strong id="min">--</strong></div>
+</div>
+
+<div class="w-full h-2 bg-neutral-800 rounded">
+  <div id="bar" class="h-full bg-accent"></div>
+</div>
+
+<div class="grid grid-cols-2 gap-10">
+
+<div class="bg-cardbg p-6 rounded-xl">
+<h3 class="text-xl mb-4">Invest in this Bond</h3>
+<input id="amount" type="number" class="w-full p-3 rounded bg-black border border-borderdark mb-4" placeholder="Enter amount">
+<button onclick="contribute()" class="w-full bg-accent py-3 rounded font-bold">Confirm Investment</button>
+</div>
+
+<div class="bg-cardbg p-6 rounded-xl">
+<h3 class="text-xl mb-4">Ownership Ledger</h3>
+<table class="w-full text-sm">
+<thead>
+<tr class="text-textmuted">
+<th>Investor</th><th>Amount</th><th class="text-right">Ownership</th>
+</tr>
+</thead>
+<tbody id="ledger"></tbody>
+</table>
+</div>
+
+</div>
+
+<div class="bg-cardbg p-6 rounded-xl flex justify-between items-center">
+<div>
+<div class="text-textmuted text-sm">Bond Status</div>
+<div id="bondState" class="text-accent text-lg">OPEN</div>
+</div>
+
+<div class="flex gap-3">
+<button id="claimBtn" class="hidden bg-green-600 px-6 py-2 rounded font-bold">Claim Yield</button>
+<button id="repairBtn" class="hidden bg-yellow-600 px-6 py-2 rounded font-bold">Repair Bond (Admin)</button>
+</div>
+</div>
+
+</main>
+
+<script>
+const API_BASE = "http://localhost:4000/api";
+
+// Read pool ID
+const poolId = localStorage.getItem("selectedPool");
+
+if (!poolId) {
+  alert("No pool selected. Returning to marketplace.");
+  window.location.href = "marketplace.html";
+}
+
+const investorAddress =
+  localStorage.getItem("walletAddress") || 
+  prompt("Enter your Ethereum address to continue:");
+
+
+const amountInput = document.getElementById("amount");
+const claimBtn = document.getElementById("claimBtn");
+const repairBtn = document.getElementById("repairBtn");
+
+async function safeFetch(url, options = {}) {
+  try {
+    const res = await fetch(url, options);
+    const text = await res.text();
+    try {
+      return { ok: res.ok, data: JSON.parse(text) };
+    } catch {
+      return { ok: res.ok, data: { error: text } };
+    }
+  } catch (err) {
+    return { ok: false, data: { error: err.message } };
+  }
+}
+
+function updateLifecycleUI(pool) {
+  bondState.textContent = pool.state;
+
+  // Reset buttons
+  claimBtn.classList.add("hidden");
+  repairBtn.classList.add("hidden");
+
+  // Show claim button only when matured
+  if (pool.state === "MATURED") {
+    claimBtn.classList.remove("hidden");
+  }
+
+  // Optional admin repair mode
+  if (pool.state === "FULL") {
+    repairBtn.classList.remove("hidden");
+  }
+}
+
+async function loadPool() {
+  const { ok, data: pool } = await safeFetch(`${API_BASE}/pool/${poolId}`);
+
+  if (!ok) {
+    alert("Failed to load pool data");
+    return;
+  }
+
+  bondName.textContent = pool.bondName || "Unnamed Bond";
+  issuer.textContent = pool.issuerName || "--";
+  target.textContent = pool.targetAmount || 0;
+  raised.textContent = pool.currentAmount || 0;
+  returnRate.textContent = pool.expectedReturnRate || 0;
+  min.textContent = pool.minContribution || 0;
+
+  const progress = pool.targetAmount
+    ? (pool.currentAmount / pool.targetAmount) * 100
+    : 0;
+
+  bar.style.width = Math.min(progress, 100) + "%";
+
+  ledger.innerHTML = "";
+
+  if (Array.isArray(pool.ownershipSnapshot)) {
+    pool.ownershipSnapshot.forEach(x => {
+      ledger.innerHTML += `
+        <tr>
+          <td>${x.contributorPublicId}</td>
+          <td>₹${x.amount}</td>
+          <td class="text-right">${(x.percentage * 100).toFixed(2)}%</td>
+        </tr>`;
+    });
+  }
+
+  updateLifecycleUI(pool);
+}
+
+async function contribute() {
+  const amount = Number(amountInput.value);
+
+  if (!amount || amount <= 0) {
+    alert("Enter a valid amount");
+    return;
+  }
+
+const payload = {
+  poolId: poolId,
+  investorAddress: investorAddress,
+  amount: amount
+};
+
+
+  const { ok, data } = await safeFetch(`${API_BASE}/investment/contribute`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  if (!ok) {
+    alert(data.error || "Contribution failed");
+    return;
+  }
+
+  alert("Investment successful!");
+
+  amountInput.value = "";
+  loadPool();
+}
+
+// -------- CLAIM FLOW (NEW) --------
+claimBtn.onclick = async function () {
+  const { ok, data } = await safeFetch(
+    `${API_BASE}/claim/${poolId}/claim`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        investorAddress: investorAddress
+      })
+    }
+  );
+
+  if (!ok) {
+    alert(data.error || "Claim failed");
+    return;
+  }
+
+  alert("Yield claimed successfully!");
+
+  loadPool();
+};
+
+// -------- OPTIONAL ADMIN REPAIR --------
+repairBtn.onclick = async function () {
+  const { ok, data } = await safeFetch(
+    `${API_BASE}/admin/repair-mint/${poolId}`,
+    { method: "POST" }
+  );
+
+  if (!ok) {
+    alert(data.error || "Repair failed");
+    return;
+  }
+
+  alert("Bond repaired successfully!");
+  loadPool();
+};
+
+loadPool();
+
+</script>
+</body>
+</html>
